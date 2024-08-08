@@ -9,14 +9,15 @@ CREATE FUNCTION SafeDiv(
 RETURNS DECIMAL(10, 2)
 RETURNS FLOAT DETERMINISTIC
 BEGIN
-    DECLARE FLOAT DEFAULT 0;
+    DECLARE res FLOAT DEFAULT 0;
 
     -- Check if the divisor is zero
     IF b = 0 THEN
         RETURN 0;
     ELSE
-        RETURN a / b;
+        SET res = a / b;
     END IF;
+    RETURN res;
 END $$
 
 DELIMITER ;
