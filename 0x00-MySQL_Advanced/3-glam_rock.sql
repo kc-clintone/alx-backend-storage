@@ -5,13 +5,11 @@ SELECT
     band_name,
     CASE
         WHEN split IS NOT NULL THEN split - formed
-        ELSE 2022 - formed
+        ELSE 2020 - formed
     END AS lifespan
 FROM
     metal_bands
 WHERE
-    main_style = 'Glam rock'
+    style = 'Glam rock'
 ORDER BY
     lifespan DESC;
-
-
