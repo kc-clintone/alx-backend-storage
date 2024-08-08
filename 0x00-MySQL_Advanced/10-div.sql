@@ -7,8 +7,10 @@ CREATE FUNCTION SafeDiv(
     b INT
 )
 RETURNS DECIMAL(10, 2)
-DETERMINISTIC
+RETURNS FLOAT DETERMINISTIC
 BEGIN
+    DECLARE FLOAT DEFAULT 0;
+
     -- Check if the divisor is zero
     IF b = 0 THEN
         RETURN 0;
