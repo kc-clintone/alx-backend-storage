@@ -1,2 +1,2 @@
 // Find using regex
-db.school.find({name: /Holberton/}).forEach(printjson);
+db.school.find({name: /^Holberton/}).forEach(printjson);
