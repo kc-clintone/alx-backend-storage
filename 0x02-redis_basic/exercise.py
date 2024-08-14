@@ -1,6 +1,6 @@
 #/usr/bin/env python3
 """
-Class module
+Cache class module: Writing strings to Redis
 """
 
 from typing import Union
@@ -10,17 +10,19 @@ import uuid
 
 class Cache:
     """
-    The class for this module
+    This class writes data to a redis instance
     """
 
     def __init__(self):
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    """
-    Stores a value in redis and returns a key
-    """
+    @call_history
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
+        """
+        Stores a value in redis and returns a key
+        """
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
