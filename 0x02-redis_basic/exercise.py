@@ -3,10 +3,22 @@
 Cache class module: Writing strings to Redis
 """
 
+import functools
 from typing import Union, Callable, Optional
 import redis
 import uuid
 
+
+def count_calls(method: Callable) -> Callable:
+    """
+    Counts calls
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        key = f"{method.__qualname__}:calls"
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
 
 class Cache:
     """
@@ -17,6 +29,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         Stores a value in redis and returns a key
