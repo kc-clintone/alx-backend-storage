@@ -3,9 +3,9 @@
 Class module
 """
 
+from typing import Union
 import redis
 import uuid
-from typing import Union
 
 
 class Cache:
