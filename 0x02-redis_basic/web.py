@@ -19,6 +19,9 @@ def cache_page(expiration: int = 10) -> Callable:
     """
 
     def decorator(func: Callable) -> Callable:
+    """
+    Caches output
+    """
         @wraps(func)
         def wrapper(url: str) -> str:
             cache_key = f"count:{url}"
