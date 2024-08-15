@@ -41,7 +41,7 @@ def cache_page(expiration: int = 10) -> Callable:
     return decorator
 
 
-@cache_page(10)
+@cache_page()
 def get_page(url: str) -> str:
     """
     Fetches the HTML content of a given URL and tracks access count.
