@@ -12,6 +12,7 @@ from typing import Callable
 
 cache = redis.Redis()
 
+
 def cache_page(expiration: int = 10) -> Callable:
     """
     Decorator to cache the HTML content of a URL with a specified
@@ -39,7 +40,8 @@ def cache_page(expiration: int = 10) -> Callable:
 
     return decorator
 
-@cache_page()
+
+@cache_page(10)
 def get_page(url: str) -> str:
     """
     Fetches the HTML content of a given URL and tracks access count.
