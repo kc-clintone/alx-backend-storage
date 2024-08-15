@@ -10,45 +10,33 @@ import requests
 from typing import Callable
 
 
-cache = redis.Redis()
+redis_client = redis.Redis()
 
-
-def cache_page(expiration: int = 10) -> Callable:
+def count_accesses_and_cache(expiration: int = 10) -> Callable:
     """
-    Decorator to cache the HTML content of a URL with a specified
-    expiration time.
+    Decorator to count URL accesses and cache the result.
     """
-
     def decorator(func: Callable) -> Callable:
-    """
-    Caches output
-    """
         @wraps(func)
-        def wrapper(url: str) -> str:
-            cache_key = f"count:{url}"
+        def wrapper(url: str, *args, **kwargs) -> str:
+            redis_client.incr(f"count:{url}")
 
-            cached_content = cache.get(cache_key)
+            cached_content = redis_client.get(url)
             if cached_content:
                 return cached_content.decode('utf-8')
 
-            content = func(url)
-            cache.setex(cache_key, expiration, content)
+            content = func(url, *args, **kwargs)
 
+            redis_client.setex(url, expiration, content)
             return content
 
         return wrapper
-
     return decorator
 
-
-@cache_page()
+@count_accesses_and_cache(expiration=10)
 def get_page(url: str) -> str:
     """
-    Fetches the HTML content of a given URL and tracks access count.
-    The result is cached with an expiration time.
+    Retrieves the HTML content of a given URL and returns it.
     """
-
-    cache.incr(f"count:{url}")
-
     response = requests.get(url)
     return response.text
